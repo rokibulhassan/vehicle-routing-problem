@@ -1,24 +1,82 @@
-<style>
-    google-map {
-        display: block;
-        height: 600px;
-    }
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Draggable directions</title>
+  <style>
+      html, body, #map-canvas {
+          height: 100%;
+          margin: 0px;
+          padding: 0px
+      }
+  </style>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+  <script>
 
-<h1>Polymer Rails Example</h1>
+      var rendererOptions = {
+          draggable: true
+      };
+      var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+      ;
+      var directionsService = new google.maps.DirectionsService();
+      var map;
 
-<google-map latitude="37.77493" longitude="-122.41942" fitToMarkers>
-  <google-map-marker latitude="37.779" longitude="-122.3892"
-                     draggable="true" title="Go Giants!"></google-map-marker>
-  <google-map-marker latitude="37.777" longitude="-122.38911"></google-map-marker>
-</google-map>
+      var bangladesh = new google.maps.LatLng(23.684994000000000000, 90.356330999999950000);
 
-<google-map disableDefaultUI showCenterMarker zoom="15"></google-map>
-<script>
-    var map = document.querySelector('google-map');
-    map.latitude = 37.77493;
-    map.longitude = -122.41942;
-    map.addEventListener('google-map-ready', function(e) {
-        alert('Map loaded!');
-    });
-</script>
+      function initialize() {
+
+          var mapOptions = {
+              zoom: 7,
+              center: bangladesh
+          };
+          map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+          directionsDisplay.setMap(map);
+          directionsDisplay.setPanel(document.getElementById('directionsPanel'));
+
+          google.maps.event.addListener(directionsDisplay, 'directions_changed', function () {
+              computeTotalDistance(directionsDisplay.getDirections());
+          });
+
+          calcRoute();
+      }
+
+      function calcRoute() {
+
+          var request = {
+              origin: 'Uttara, Dhaka',
+              destination: 'Mohakhali DOHS, Dhaka',
+              waypoints: [
+//                  {location: 'Mohakhali'},
+//                  {location: 'Mohakhali'}
+              ],
+              travelMode: google.maps.TravelMode.DRIVING
+          };
+          directionsService.route(request, function (response, status) {
+              if (status == google.maps.DirectionsStatus.OK) {
+                  directionsDisplay.setDirections(response);
+              }
+          });
+      }
+
+      function computeTotalDistance(result) {
+          var total = 0;
+          var myroute = result.routes[0];
+          for (var i = 0; i < myroute.legs.length; i++) {
+              total += myroute.legs[i].distance.value;
+          }
+          total = total / 1000.0;
+          document.getElementById('total').innerHTML = total + ' km';
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+
+  </script>
+</head>
+<body>
+<div id="map-canvas" style="float:left;width:70%; height:100%"></div>
+<div id="directionsPanel" style="float:right;width:30%;height:100%">
+  <p>Total Distance: <span id="total"></span></p>
+</div>
+</body>
+</html>

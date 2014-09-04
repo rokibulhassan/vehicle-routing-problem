@@ -1,0 +1,4 @@
+module PolymerGoogleApis
+  class Engine < ::Rails::Engine
+  end
+end
