@@ -26,3 +26,8 @@ gem 'polymer-core-rails'
 gem 'polymer-paper-rails'
 gem 'polymer-google-apis', :path => './lib/polymer-google-apis'
 gem 'polymer-google-map', :path => './lib/polymer-google-map'
+
+gem 'less-rails'
+gem 'twitter-bootstrap-rails',
+    :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git',
+    :branch => "bootstrap3"

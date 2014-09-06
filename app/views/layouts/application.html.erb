@@ -2,9 +2,8 @@
 <html>
 <head>
   <title>Vrp</title>
-  <%= stylesheet_link_tag    "application", "jquery-gmaps-latlon-picker", media: "all", "data-turbolinks-track" => true %>
+  <%= stylesheet_link_tag "application", "jquery-gmaps-latlon-picker", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "jquery-gmaps-latlon-picker", "data-turbolinks-track" => true %>
-  <!--<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>-->
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
   <%#= html_import_tag 'application'%>
@@ -12,6 +11,32 @@
 </head>
 <body>
 
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <%= link_to "VRP", root_path, method: :get, class: "navbar-brand" %>
+  </div>
+
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav navbar-right navbar-user">
+      <li>
+        <%= link_to routes_path, method: :get do %>
+            <i class="glyphicon glyphicon-list"></i> Routes List
+        <% end %>
+      </li>
+      <li>
+        <%= link_to new_route_path, method: :get do %>
+            <i class="glyphicon glyphicon-share-alt"></i> Create New Route
+        <% end %>
+      </li>
+    </ul>
+  </div>
+</nav>
 
 <%= yield %>
 
