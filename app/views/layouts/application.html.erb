@@ -2,9 +2,12 @@
 <html>
 <head>
   <title>Vrp</title>
-  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-  <%= html_import_tag 'application'%>
+  <%= stylesheet_link_tag    "application", "jquery-gmaps-latlon-picker", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "jquery-gmaps-latlon-picker", "data-turbolinks-track" => true %>
+  <!--<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>-->
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+  <%#= html_import_tag 'application'%>
   <%= csrf_meta_tags %>
 </head>
 <body>

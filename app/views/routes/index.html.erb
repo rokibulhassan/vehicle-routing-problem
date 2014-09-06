@@ -1,0 +1,27 @@
+<h1>Listing routes</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Origin</th>
+    <th>Destination</th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @routes.each do |route| %>
+      <tr>
+        <td><%= route.origin %></td>
+        <td><%= route.destination %></td>
+        <td><%= link_to 'Show on Map', route %></td>
+        <td><%= link_to 'Destroy', route, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Route', new_route_path %>
