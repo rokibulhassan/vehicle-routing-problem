@@ -1,6 +1,6 @@
 <div class="text-center">
-  <h2>New Routes</h2>
-  <%= form_for(@route) do |f| %>
+  <h2>New tracks</h2>
+  <%= form_for(@track) do |f| %>
       <div class="row form-group">
         <div class="gllpLatlonPicker col-md-5 text-right" id="start_point">
           <h2>Select Start Point</h2>
@@ -12,8 +12,8 @@
           <br/><br/>
 
           <div class="gllpMap">Google Maps</div>
-          <input type="hidden" class="gllpLatitude" value="60"/>
-          <input type="hidden" class="gllpLongitude" value="30"/>
+          <input type="hidden" class="gllpLatitude" value="23.684994000000000000"/>
+          <input type="hidden" class="gllpLongitude" value="90.356330999999950000"/>
           <input type="hidden" class="gllpZoom" value="12"/>
           <%= f.text_field :origin, class: "gllpLocationName form-control" %>
         </div>
@@ -28,17 +28,17 @@
           <br/><br/>
 
           <div class="gllpMap">Google Maps</div>
-          <input type="hidden" class="gllpLatitude" value="60"/>
-          <input type="hidden" class="gllpLongitude" value="30"/>
+          <input type="hidden" class="gllpLatitude" value="23.684994000000000000"/>
+          <input type="hidden" class="gllpLongitude" value="90.356330999999950000"/>
           <input type="hidden" class="gllpZoom" value="12"/>
           <%= f.text_field :destination, class: "gllpLocationName form-control" %>
         </div>
       </div>
-      <button id="other" class="btn btn-primary">Create Routes</button>
+      <button id="other" class="btn btn-primary">Create tracks</button>
   <% end %>
 </div>
 <script type="application/javascript">
     $("#other").click(function () {
-        $("#new_route").submit();
+        $("#new_track").submit();
     });
 </script>
