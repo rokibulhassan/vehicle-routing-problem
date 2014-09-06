@@ -15,7 +15,7 @@
       <tr>
         <td><%= route.origin %></td>
         <td><%= route.destination %></td>
-        <td><%= link_to 'Show on Map', route %></td>
+        <td><%= link_to 'Show on Map', route, method: :get %></td>
         <td><%= link_to 'Destroy', route, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
   <% end %>
@@ -24,4 +24,4 @@
 
 <br>
 
-<%= link_to 'New Route', new_route_path %>
+<%= link_to 'New Route', new_route_path, method: :get %>

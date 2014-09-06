@@ -1,4 +1,6 @@
 Vrp::Application.routes.draw do
+  resources :tracks
+
   resources :routes
 
   resources :dashboards
