@@ -1,42 +1,42 @@
-<legend>New route</legend>
+<div class="text-center">
+  <h2>New Routes</h2>
+  <%= form_for(@route) do |f| %>
+      <div class="row form-group">
+        <div class="gllpLatlonPicker col-md-5 text-right" id="start_point">
+          <h2>Select Start Point</h2>
 
-<%= form_for(@route) do |f| %>
-    <div>
-      <div class="gllpLatlonPicker" id="start_point">
-        <h2>Select Start Point</h2>
+          <form id="origin_search text-right">
+            <input type="text" class="gllpSearchField form-control">
+            <input type="button" class="gllpSearchButton btn btn-sm btn-info" value="search">
+          </form>
+          <br/><br/>
 
-        <form id="origin_search">
-          <input type="text" class="gllpSearchField">
-          <input type="button" class="gllpSearchButton" value="search">
-        </form>
-        <br/><br/>
+          <div class="gllpMap">Google Maps</div>
+          <input type="hidden" class="gllpLatitude" value="60"/>
+          <input type="hidden" class="gllpLongitude" value="30"/>
+          <input type="hidden" class="gllpZoom" value="12"/>
+          <%= f.text_field :origin, class: "gllpLocationName form-control" %>
+        </div>
 
-        <div class="gllpMap">Google Maps</div>
-        <input type="hidden" class="gllpLatitude" value="60"/>
-        <input type="hidden" class="gllpLongitude" value="30"/>
-        <input type="hidden" class="gllpZoom" value="12"/>
-        <%= f.text_field :origin, class: "gllpLocationName", size: 42 %>
+        <div class="gllpLatlonPicker col-md-5 text-right" id="end_point">
+          <h2>Select End Point</h2>
+
+          <form id="destination_search">
+            <input type="text" class="gllpSearchField form-control">
+            <input type="button" class="gllpSearchButton btn btn-sm btn-info" value="search">
+          </form>
+          <br/><br/>
+
+          <div class="gllpMap">Google Maps</div>
+          <input type="hidden" class="gllpLatitude" value="60"/>
+          <input type="hidden" class="gllpLongitude" value="30"/>
+          <input type="hidden" class="gllpZoom" value="12"/>
+          <%= f.text_field :destination, class: "gllpLocationName form-control" %>
+        </div>
       </div>
-
-      <div class="gllpLatlonPicker" id="end_point">
-        <h2>Select End Point</h2>
-
-        <form id="destination_search">
-          <input type="text" class="gllpSearchField">
-          <input type="button" class="gllpSearchButton" value="search">
-        </form>
-        <br/><br/>
-
-        <div class="gllpMap">Google Maps</div>
-        <input type="hidden" class="gllpLatitude" value="60"/>
-        <input type="hidden" class="gllpLongitude" value="30"/>
-        <input type="hidden" class="gllpZoom" value="12"/>
-        <%= f.text_field :destination, class: "gllpLocationName", size: 42 %>
-      </div>
-    </div>
-    <button id="other">Create Routes</button>
-<% end %>
-
+      <button id="other" class="btn btn-primary">Create Routes</button>
+  <% end %>
+</div>
 <script type="application/javascript">
     $("#other").click(function () {
         $("#new_route").submit();
