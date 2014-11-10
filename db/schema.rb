@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140906155708) do
+ActiveRecord::Schema.define(version: 20141110183801) do
+
+  create_table "route_cycles", force: true do |t|
+    t.string   "nodes"
+    t.integer  "load"
+    t.float    "cost"
+    t.string   "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tracks", force: true do |t|
     t.string   "origin"

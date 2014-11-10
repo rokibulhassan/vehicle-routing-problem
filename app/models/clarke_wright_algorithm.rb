@@ -16,34 +16,53 @@ module ClearkWrightAlgorith
                 [8, 16, 18, 12, 7, 6, 16, 0, 11, 11],
                 [6, 17, 14, 12, 15, 15, 8, 11, 0, 10],
                 [12, 22, 22, 17, 18, 15, 16, 11, 10, 0]]
-
-      #Out put Cost Array
-      #   0  1  2  3  4  5  6  7  8  9
-      #0 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      #1 [0, 0, 15, 14, 13, 10, 7, 4, 1, 2],
-      #2 [0, 0, 0, 9, 6, 4, 12, 1, 3, 1],
-      #3 [0, 0, 0, 0, 10, 8, 5, 3, 1, 2],
-      #4 [0, 0, 0, 0, 0, 17, 2, 11, 1, 4],
-      #5 [0, 0, 0, 0, 0, 0, 1, 12, 1, 7],
-      #6 [0, 0, 0, 0, 0, 0, 0, 1, 7, 5],
-      #7 [0, 0, 0, 0, 0, 0, 0, 0, 3, 9],
-      #8 [0, 0, 0, 0, 0, 0, 0, 0, 0, 8],
-      #9 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     end
 
     def solution
-      initial_savings
+      savings = savings_computation
+      savings = improve_savings(savings)
+      #route_extension(savings)
     end
 
-    def initial_savings
+    def savings_computation
       savings = {}
       (1..@node).each do |i|
         (i+1..@node).each do |j|
-          cost = @costs[0][i] + @costs[0][j] - @costs[i][j] #savings_S_ij = cost_C_0i + cost_C_0j - cost_C_ij
+          cost = @costs[0][i] + @costs[0][j] - @costs[i][j]
           savings.merge!({[i, j] => cost})
         end
       end
       savings.sort { |a1, a2| a2[1].to_i <=> a1[1].to_i }
     end
+
+    def improve_savings(savings)
+      savings.each do |edge, cost|
+        RouteCycle.create(node: edge, cost: cost, status: 'initialize')
+      end
+    end
+
+    def route_extension(savings)
+      cycles = {}
+      savings.each_with_index do |edge, index|
+        #Edge [4,5]: Join cycles 0-4-0 and 0-5-0: result 0-4-5-0, load d4 + d5 = 20 < K.
+        #Edge [1,2]: Join 0-1-0 and 0-2-0: result 0-1-2-0, load d + d = 25 < K. 1 2
+        #Edge [1,3]: Capacity limit: d +d +d = 43 > K
+        load = 0
+        build_cycle = []
+
+        edge.each do |node|
+          load += @demands[node]
+          build_cycle << node
+        end
+
+        if load < @capacity
+          data = savings[index].replace(build_cycle)
+          puts "savings:: #{data}"
+          route_extension(data)
+          #cycles.merge!({build_cycle => load})
+        end
+      end
+    end
+
   end
 end
