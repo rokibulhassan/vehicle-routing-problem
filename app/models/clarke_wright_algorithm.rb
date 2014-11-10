@@ -4,8 +4,8 @@ module ClearkWrightAlgorith
 
     def initialize
       @node = 9
-      @capacity = 40 #Capacity of a vehicle
-      @demands = [0, 10, 15, 18, 17, 3, 5, 9, 4, 6] #People in each node
+      @capacity = 40
+      @demands = [0, 10, 15, 18, 17, 3, 5, 9, 4, 6]
       @costs = [[0, 12, 11, 7, 10, 10, 9, 8, 6, 12],
                 [12, 0, 8, 5, 9, 12, 14, 16, 17, 22],
                 [11, 8, 0, 9, 15, 17, 8, 18, 14, 22],
@@ -15,24 +15,35 @@ module ClearkWrightAlgorith
                 [9, 14, 8, 11, 17, 18, 0, 16, 8, 16],
                 [8, 16, 18, 12, 7, 6, 16, 0, 11, 11],
                 [6, 17, 14, 12, 15, 15, 8, 11, 0, 10],
-                [12, 22, 22, 17, 18, 15, 16, 11, 10, 0]] #Symmetric costs
+                [12, 22, 22, 17, 18, 15, 16, 11, 10, 0]]
+
+      #Out put Cost Array
+      #   0  1  2  3  4  5  6  7  8  9
+      #0 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      #1 [0, 0, 15, 14, 13, 10, 7, 4, 1, 2],
+      #2 [0, 0, 0, 9, 6, 4, 12, 1, 3, 1],
+      #3 [0, 0, 0, 0, 10, 8, 5, 3, 1, 2],
+      #4 [0, 0, 0, 0, 0, 17, 2, 11, 1, 4],
+      #5 [0, 0, 0, 0, 0, 0, 1, 12, 1, 7],
+      #6 [0, 0, 0, 0, 0, 0, 0, 1, 7, 5],
+      #7 [0, 0, 0, 0, 0, 0, 0, 0, 3, 9],
+      #8 [0, 0, 0, 0, 0, 0, 0, 0, 0, 8],
+      #9 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     end
 
     def solution
-      #savings_S_ij = cost_C_0i + cost_C_0j - cost_C_ij
+      initial_savings
     end
 
-    def initial_saving
-      data = {}
-      (0..@node).each do |i|
-        (0..@node).each do |j|
-          cost = @costs[0][i] + @costs[0][j] - @costs[i][j]
-          data.merge({:"saving#{i}#{j}" => cost})
-          puts ["saving#{i}#{j}", cost]
+    def initial_savings
+      savings = {}
+      (1..@node).each do |i|
+        (i+1..@node).each do |j|
+          cost = @costs[0][i] + @costs[0][j] - @costs[i][j] #savings_S_ij = cost_C_0i + cost_C_0j - cost_C_ij
+          savings.merge!({[i, j] => cost})
         end
       end
-      return data
+      savings.sort { |a1, a2| a2[1].to_i <=> a1[1].to_i }
     end
-
   end
 end
