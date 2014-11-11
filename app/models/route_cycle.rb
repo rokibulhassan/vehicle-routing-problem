@@ -2,6 +2,7 @@ class RouteCycle < ActiveRecord::Base
   serialize :nodes, Array
 
   scope :order_as_cost, -> { order('cost DESC') }
+  scope :initialize, -> { where(status: 'initialize') }
   scope :improving, -> { where(status: 'improving') }
   scope :pending, -> { where(status: 'pending') }
   scope :complete, -> { where(status: 'complete') }
@@ -25,48 +26,51 @@ class RouteCycle < ActiveRecord::Base
   end
 
   def self.route_extension(capacity=40, demands = [0, 10, 15, 18, 17, 3, 5, 9, 4, 6])
-    route_cycles = RouteCycle.order_as_cost
+    initialized = RouteCycle.initialize.order_as_cost
 
-    route_cycles.each do |route_cycle|
-      route_cycle.nodes.each do |node|
+    initialized.each do |route_cycle|
 
-        #Search Improving Cycle for nodes
-        old_cycles = RouteCycle.improving.select { |rc| rc.nodes.include?(node) }
+      node_1 = route_cycle.nodes[0]
+      node_2 = route_cycle.nodes[1]
+      improving = RouteCycle.improving.order_as_cost
 
-        if old_cycles.present?
-          new_node = route_cycle.nodes.reject { |n| n == node }[0]
-          load = demands[new_node]
-          old_cycles.each do |old_cycle|
+      if improving.present?
+        cycles_for_node_1 = improving.select { |rc| rc.nodes.include?(node_1) }.first
+        cycles_for_node_2 = improving.select { |rc| rc.nodes.include?(node_2) }.first
 
-            load += old_cycle.load
-            old_nodes = old_cycle.nodes
-
-            logger.info [new_node, old_nodes]
-
-            if load < capacity
-              if old_nodes.exclude?(new_node)
-                old_cycle.improve_cycle!(load, old_nodes << new_node)
-              else
-                route_cycle.update_column(:status, 'complete')
-              end
-            end
-          end
-
-        else
-
-          #Build default cycle with existing nodes
-          load = 0
-          load += demands[node].to_i
-          load < capacity ? route_cycle.improve_cycle!(load, route_cycle.nodes) : route_cycle.update_column(:status, 'pending')
-
+        if cycles_for_node_1.present? && cycles_for_node_2.present?
+          route_cycle.update_column(:status, 'complete')
+        elsif cycles_for_node_1.present? && !cycles_for_node_2.present?
+          nodes = cycles_for_node_1.nodes << node_2
+          load = demands[node_2] + cycles_for_node_1.load.to_i
+          cycles_for_node_1.improve_cycle!(load, nodes) if load < capacity
+        elsif !cycles_for_node_1.present? && cycles_for_node_2.present?
+          nodes = cycles_for_node_2.nodes << node_1
+          load = demands[node_1] + cycles_for_node_2.load.to_i
+          cycles_for_node_2.improve_cycle!(load, nodes) if load < capacity
+        elsif !cycles_for_node_1.present? && !cycles_for_node_2.present?
+          nodes = route_cycle.nodes
+          load = demands[node_1] + demands[node_2]
+          route_cycle.make_initial_cycle!(load, capacity, nodes)
         end
+      else
+        nodes = route_cycle.nodes
+        load = demands[node_1] + demands[node_2]
+        route_cycle.make_initial_cycle!(load, capacity, nodes)
       end
     end
+  end
 
+  def make_initial_cycle!(load, capacity, nodes)
+    if load < capacity
+      self.improve_cycle!(load, nodes)
+    else
+      self.update_column(:status, 'pending')
+    end
   end
 
   def improve_cycle!(load, edges)
-    logger.info "Updating #{self.id} nodes: #{nodes}"
+    logger.info "Updating #{self.inspect} nodes: #{edges}"
     self.load = load
     self.nodes = edges
     self.status = 'improving'
