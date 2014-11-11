@@ -17,6 +17,7 @@ class RouteCycle < ActiveRecord::Base
                                                    [8, 16, 18, 12, 7, 6, 16, 0, 11, 11],
                                                    [6, 17, 14, 12, 15, 15, 8, 11, 0, 10],
                                                    [12, 22, 22, 17, 18, 15, 16, 11, 10, 0]])
+    RouteCycle.destroy_all
     (1..stopage).each do |i|
       (i+1..stopage).each do |j|
         cost = costs[0][i] + costs[0][j] - costs[i][j]
@@ -28,7 +29,7 @@ class RouteCycle < ActiveRecord::Base
   def self.route_extension(capacity=40, demands = [0, 10, 15, 18, 17, 3, 5, 9, 4, 6])
     initialized = RouteCycle.initialize.order_as_cost
 
-    initialized.each do |route_cycle|
+    initialized.each_with_index do |route_cycle, index|
 
       node_1 = route_cycle.nodes[0]
       node_2 = route_cycle.nodes[1]
@@ -37,17 +38,16 @@ class RouteCycle < ActiveRecord::Base
       if improving.present?
         cycles_for_node_1 = improving.select { |rc| rc.nodes.include?(node_1) }.first
         cycles_for_node_2 = improving.select { |rc| rc.nodes.include?(node_2) }.first
-
         if cycles_for_node_1.present? && cycles_for_node_2.present?
-          route_cycle.update_column(:status, 'complete')
+          route_cycle.complete!
         elsif cycles_for_node_1.present? && !cycles_for_node_2.present?
           nodes = cycles_for_node_1.nodes << node_2
           load = demands[node_2] + cycles_for_node_1.load.to_i
-          cycles_for_node_1.improve_cycle!(load, nodes) if load < capacity
+          cycles_for_node_1.improve_old_cycle!(load, capacity, nodes, route_cycle)
         elsif !cycles_for_node_1.present? && cycles_for_node_2.present?
           nodes = cycles_for_node_2.nodes << node_1
           load = demands[node_1] + cycles_for_node_2.load.to_i
-          cycles_for_node_2.improve_cycle!(load, nodes) if load < capacity
+          cycles_for_node_2.improve_old_cycle!(load, capacity, nodes, route_cycle)
         elsif !cycles_for_node_1.present? && !cycles_for_node_2.present?
           nodes = route_cycle.nodes
           load = demands[node_1] + demands[node_2]
@@ -62,15 +62,30 @@ class RouteCycle < ActiveRecord::Base
   end
 
   def make_initial_cycle!(load, capacity, nodes)
-    if load < capacity
-      self.improve_cycle!(load, nodes)
-    else
-      self.update_column(:status, 'pending')
-    end
+    load <= capacity ? self.improve_cycle!(load, nodes) : self.pending!
+  end
+
+  def improve_old_cycle!(load, capacity, nodes, initial_cycle)
+    load <= capacity ? self.improve_cycle!(load, nodes) : initial_cycle.pending!
+  end
+
+  def complete!
+    self.update_column(:status, 'complete')
+  end
+
+  def pending!
+    self.update_column(:status, 'pending')
+  end
+
+  def get_nodes(edge)
+    return self.nodes << edge
+  end
+
+  def get_load(demands, edge)
+    demands[edge] + self.load.to_i
   end
 
   def improve_cycle!(load, edges)
-    logger.info "Updating #{self.inspect} nodes: #{edges}"
     self.load = load
     self.nodes = edges
     self.status = 'improving'
