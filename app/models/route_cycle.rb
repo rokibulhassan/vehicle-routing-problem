@@ -1,4 +1,5 @@
 class RouteCycle < ActiveRecord::Base
+  extend ApplicationHelper
   serialize :nodes, Array
 
   scope :order_as_cost, -> { order('cost DESC') }
@@ -8,32 +9,21 @@ class RouteCycle < ActiveRecord::Base
   scope :complete, -> { where(status: 'complete') }
 
 
-  def self.clarke_wright
-    stopage ||= 9
-    capacity ||= 40
-    demands ||= [0, 10, 15, 18, 17, 3, 5, 9, 4, 6]
-    costs ||= [[0, 12, 11, 7, 10, 10, 9, 8, 6, 12],
-               [12, 0, 8, 5, 9, 12, 14, 16, 17, 22],
-               [11, 8, 0, 9, 15, 17, 8, 18, 14, 22],
-               [7, 5, 9, 0, 7, 9, 11, 12, 12, 17],
-               [10, 9, 15, 7, 0, 3, 17, 7, 15, 18],
-               [10, 12, 17, 9, 3, 0, 18, 6, 15, 15],
-               [9, 14, 8, 11, 17, 18, 0, 16, 8, 16],
-               [8, 16, 18, 12, 7, 6, 16, 0, 11, 11],
-               [6, 17, 14, 12, 15, 15, 8, 11, 0, 10],
-               [12, 22, 22, 17, 18, 15, 16, 11, 10, 0]]
-
-    savings_computation(stopage, costs)
-    route_extension(capacity, demands)
-    cost_calculation
+  def self.test_calling
+    build_initial_cycle
+    route_extension(40, demands)
   end
 
-  def self.savings_computation(stopage, costs)
-    RouteCycle.destroy_all
-    (1..stopage).each do |i|
-      (i+1..stopage).each do |j|
-        cost = costs[0][i] + costs[0][j] - costs[i][j]
+  def self.build_initial_cycle(costs=symmetric_costs)
+    clean_cycle!
+    (1..limit).each do |i|
+      (i+1..limit).each do |j|
+        cost = costs[0][i].to_f + costs[0][j].to_f - costs[i][j].to_f
+        puts "depot_id: ===== i:: #{i} ========= j :: #{j} "
         RouteCycle.create(nodes: [i, j], cost: cost, status: 'initialize')
+        #if i < depots_size
+        #  RouteCycle.create(nodes: [depot.id, depots[j].id], cost: cost, status: 'initialize')
+        #end
       end
     end
   end
@@ -107,9 +97,9 @@ class RouteCycle < ActiveRecord::Base
     end
   end
 
-  def sef.cost_calculation
+  def self.cost_calculation
     improving = RouteCycle.improving.order_as_cost
-    #TODO calculate cost and Update stauts as complete
+    #TODO calculate cost and Update status as complete
   end
 
   def make_initial_cycle!(load, capacity, nodes)
