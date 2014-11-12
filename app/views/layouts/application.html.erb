@@ -25,6 +25,16 @@
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav navbar-right navbar-user">
       <li>
+        <%= link_to depots_path, method: :get do %>
+            <i class="glyphicon glyphicon-list"></i> Depots List
+        <% end %>
+      </li>
+      <li>
+        <%= link_to new_depot_path, method: :get do %>
+            <i class="glyphicon glyphicon-share-alt"></i> Create New Depot
+        <% end %>
+      </li>
+      <li>
         <%= link_to tracks_path, method: :get do %>
             <i class="glyphicon glyphicon-list"></i> Tracks List
         <% end %>
@@ -38,7 +48,9 @@
   </div>
 </nav>
 
-<%= yield %>
+<div class="container" style="margin-top: 50px;">
+  <%= yield %>
+</div>
 
 </body>
 </html>

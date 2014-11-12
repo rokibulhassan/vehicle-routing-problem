@@ -1,5 +1,6 @@
 Vrp::Application.routes.draw do
   resources :tracks
+  resources :depots
 
   resources :dashboards
   # The priority is based upon order of creation: first created -> highest priority.

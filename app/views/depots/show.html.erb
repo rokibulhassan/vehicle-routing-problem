@@ -1,0 +1,20 @@
+<script type="text/javascript">
+    window.onload = function () {
+        var mapOptions = {
+            //give latitude and long
+            center: new google.maps.LatLng(<%= @depot.latitude.to_s %>, <%= @depot.longitude.to_s %>),
+            zoom: 10,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var infoWindow = new google.maps.InfoWindow();
+        var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+        //give latitude and long
+        var myLatlng = new google.maps.LatLng(<%= @depot.latitude.to_s %>, <%= @depot.longitude.to_s %>);
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            title: "Mumbai"
+        });
+    }
+</script>
+<div id="dvMap" style="width: 900px; height: 600px"></div>
