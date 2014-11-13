@@ -4,9 +4,13 @@ class DashboardsController < ApplicationController
 
   def optimum_route
     @routes = RouteCycle.optimize_coordinate
-    end
+  end
 
   def test_map
     @routes = RouteCycle.optimize_coordinate
+  end
+
+  def reset_data
+    RouteCycle.clarke_wright
   end
 end

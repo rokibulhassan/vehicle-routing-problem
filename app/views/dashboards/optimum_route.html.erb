@@ -125,14 +125,17 @@
         var myOptions = {
             zoom: 10,
             center: new google.maps.LatLng(23.684994000000000000, 90.356330999999950000),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            origin: new google.maps.LatLng(23.7795, 23.7795),
+            destination: new google.maps.LatLng(23.7795, 23.7795)
         };
         my.maps.map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
-
+        <% counter = 0 %>
         <% @routes.each do |route|%>
-           <% route.each_with_index do |coordinate, index|%>
-             my.routes.r<%=index%> = new Route(<%=coordinate%>).drawRoute(my.maps.map);
-           <% end%>
+        <% route.each do |coordinate|%>
+        my.routes.r<%=counter%> = new Route(<%=coordinate%>).drawRoute(my.maps.map);
+        <% counter+=1 %>
+        <% end%>
         <% end%>
 
         my.routes.rx = new Route();
