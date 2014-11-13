@@ -5,6 +5,7 @@ Vrp::Application.routes.draw do
   resources :dashboards do
     collection do
       get 'optimum_route'
+      get 'view_on_map'
       get 'reset_data'
       get 'test_map'
     end

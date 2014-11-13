@@ -3,6 +3,10 @@ class DashboardsController < ApplicationController
   end
 
   def optimum_route
+    @routes = RouteCycle.optimize_routes
+  end
+
+  def view_on_map
     @routes = RouteCycle.optimize_coordinate
   end
 

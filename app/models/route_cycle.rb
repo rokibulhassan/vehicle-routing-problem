@@ -101,6 +101,22 @@ class RouteCycle < ActiveRecord::Base
     improving.collect(&:optimized!)
   end
 
+  def self.optimize_routes
+    paths = []
+    routes = RouteCycle.optimized
+    center = Depot.where(index: 0).first
+    routes.each do |route|
+      cycle = []
+      cycle << center.name
+      cycle << Depot.where(index: route.nodes).collect(&:name)
+      cycle << center.name
+      cycle.flatten!
+      paths << [name: cycle, demand: route.load, cost: route.cost]
+    end
+    puts "#{paths.inspect}"
+    paths
+  end
+
 
   def self.optimize_coordinate
     coordinates = []
