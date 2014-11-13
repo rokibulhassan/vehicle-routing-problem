@@ -8,9 +8,9 @@
 <div class="gllpLatlonPicker">
   <%= form_for(@depot) do |f| %>
       <div class="gllpMap">Google Maps</div>
-      <input type="hidden" class="gllpZoom" value="15"/>
-      <%= f.text_field :latitude, class: "gllpLatitude", value: "23.811009049020722" %>
-      <%= f.text_field :longitude, class: "gllpLongitude", value: "90.4140092226562" %>
+      <input type="hidden" class="gllpZoom" value="20"/>
+      <%= f.text_field :latitude, class: "gllpLatitude", value: f.object.latitude || "23.811009049020722" %>
+      <%= f.text_field :longitude, class: "gllpLongitude", value: f.object.longitude || "90.4140092226562" %>
       <%= f.text_field :name, class: "gllpLocationName", style: "width: 28%;" %>
       <br>
       People <%= f.text_field :demand %>

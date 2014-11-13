@@ -25,6 +25,11 @@
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav navbar-right navbar-user">
       <li>
+        <%= link_to optimum_route_dashboards_path, method: :get do %>
+            <i class="glyphicon glyphicon-list"></i> Optimized Routes
+        <% end %>
+      </li>
+      <li>
         <%= link_to depots_path, method: :get do %>
             <i class="glyphicon glyphicon-list"></i> Depots List
         <% end %>

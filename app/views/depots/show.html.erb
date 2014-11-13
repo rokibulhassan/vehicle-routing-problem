@@ -3,7 +3,7 @@
         var mapOptions = {
             //give latitude and long
             center: new google.maps.LatLng(<%= @depot.latitude.to_s %>, <%= @depot.longitude.to_s %>),
-            zoom: 10,
+            zoom: 20,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         var infoWindow = new google.maps.InfoWindow();
@@ -13,7 +13,7 @@
         var marker = new google.maps.Marker({
             position: myLatlng,
             map: map,
-            title: "Mumbai"
+            title: "Dhaka"
         });
     }
 </script>

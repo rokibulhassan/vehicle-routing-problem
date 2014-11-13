@@ -7,11 +7,13 @@ class RouteCycle < ActiveRecord::Base
   scope :improving, -> { where(status: 'improving') }
   scope :pending, -> { where(status: 'pending') }
   scope :complete, -> { where(status: 'complete') }
+  scope :optimized, -> { where(status: 'optimized') }
 
 
-  def self.test_calling
+  def self.clarke_wright
     build_initial_cycle
     route_extension(40, demands)
+    cost_calculation
   end
 
   def self.build_initial_cycle(costs=symmetric_costs)
@@ -19,11 +21,7 @@ class RouteCycle < ActiveRecord::Base
     (1..limit).each do |i|
       (i+1..limit).each do |j|
         cost = costs[0][i].to_f + costs[0][j].to_f - costs[i][j].to_f
-        puts "depot_id: ===== i:: #{i} ========= j :: #{j} "
         RouteCycle.create(nodes: [i, j], cost: cost, status: 'initialize')
-        #if i < depots_size
-        #  RouteCycle.create(nodes: [depot.id, depots[j].id], cost: cost, status: 'initialize')
-        #end
       end
     end
   end
@@ -99,7 +97,30 @@ class RouteCycle < ActiveRecord::Base
 
   def self.cost_calculation
     improving = RouteCycle.improving.order_as_cost
-    #TODO calculate cost and Update status as complete
+    improving.collect(&:optimized!)
+  end
+
+
+  def self.optimize_coordinate
+    coordinates = []
+    routes = RouteCycle.optimized
+    center = Depot.where(index: 0).first
+    routes.each do |route|
+      cycle = []
+      nodes = []
+      cycle << center
+      cycle << Depot.where(index: route.nodes)
+      cycle << center
+      cycle.flatten!
+
+      cycle.each_cons(2) do |depot, next_depot|
+        start_node = [depot.latitude, depot.longitude]
+        end_node = [next_depot.latitude, next_depot.longitude]
+        nodes << [start_node, end_node]
+      end
+      coordinates << nodes
+    end
+    coordinates
   end
 
   def make_initial_cycle!(load, capacity, nodes)
@@ -130,6 +151,10 @@ class RouteCycle < ActiveRecord::Base
 
   def pending!
     self.update_column(:status, 'pending')
+  end
+
+  def optimized!
+    self.update_column(:status, 'optimized')
   end
 
   def get_nodes(node)

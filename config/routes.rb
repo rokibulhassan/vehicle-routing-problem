@@ -2,7 +2,11 @@ Vrp::Application.routes.draw do
   resources :tracks
   resources :depots
 
-  resources :dashboards
+  resources :dashboards do
+    collection do
+      get 'optimum_route'
+    end
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
