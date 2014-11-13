@@ -5,6 +5,7 @@ Vrp::Application.routes.draw do
   resources :dashboards do
     collection do
       get 'optimum_route'
+      get 'test_map'
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.
