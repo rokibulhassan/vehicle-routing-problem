@@ -1,5 +1,6 @@
 class DashboardsController < ApplicationController
   def index
+    render :layout => false
   end
 
   def optimum_route
@@ -10,8 +11,11 @@ class DashboardsController < ApplicationController
     @routes = RouteCycle.optimize_coordinate
   end
 
-  def test_map
-    @routes = RouteCycle.optimize_coordinate
+  def show_routes
+    @start = Depot.where(index: 0).first
+    route = RouteCycle.find(params[:route_cycle_id])
+    @depots = Depot.where(index: route.nodes)
+    render :layout => false
   end
 
   def reset_data

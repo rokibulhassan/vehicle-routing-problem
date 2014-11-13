@@ -111,7 +111,7 @@ class RouteCycle < ActiveRecord::Base
       cycle << Depot.where(index: route.nodes).collect(&:name)
       cycle << center.name
       cycle.flatten!
-      paths << [name: cycle, demand: route.load, cost: route.cost]
+      paths << [id: route.id, name: cycle, demand: route.load, cost: route.cost]
     end
     puts "#{paths.inspect}"
     paths
