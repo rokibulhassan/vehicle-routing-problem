@@ -1,4 +1,5 @@
 class CapacitiesController < ApplicationController
+  include ApplicationHelper
   before_action :set_capacity, only: [:show, :edit, :update, :destroy]
 
   # GET /capacities
@@ -14,7 +15,7 @@ class CapacitiesController < ApplicationController
 
   # GET /capacities/new
   def new
-    @capacity = Capacity.new
+    @capacity = Capacity.new(limit: capacity)
   end
 
   # GET /capacities/1/edit
@@ -62,13 +63,13 @@ class CapacitiesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_capacity
-      @capacity = Capacity.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_capacity
+    @capacity = Capacity.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def capacity_params
-      params.require(:capacity).permit(:limit)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def capacity_params
+    params.require(:capacity).permit(:limit)
+  end
 end
