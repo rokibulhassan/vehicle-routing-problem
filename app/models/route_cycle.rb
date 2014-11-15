@@ -13,7 +13,8 @@ class RouteCycle < ActiveRecord::Base
   def self.clarke_wright
     build_initial_cycle
     route_extension(capacity, demands)
-    cost_calculation
+    route_optimized!
+    calculate_optimized_cost
   end
 
   def self.build_initial_cycle(costs=symmetric_costs)
@@ -95,7 +96,7 @@ class RouteCycle < ActiveRecord::Base
     end
   end
 
-  def self.cost_calculation
+  def self.route_optimized!
     improving = RouteCycle.improving.order_as_cost
     improving.collect(&:optimized!)
   end
@@ -107,13 +108,37 @@ class RouteCycle < ActiveRecord::Base
     routes.each do |route|
       cycle = []
       cycle << center.name
-      cycle << Depot.where(index: route.nodes).collect(&:name)
+      route.nodes.each do |node|
+        cycle << Depot.where(index: node).first.name
+      end
       cycle << center.name
       cycle.flatten!
       paths << [id: route.id, name: cycle, demand: route.load, cost: route.cost]
     end
     puts "#{paths.inspect}"
     paths
+  end
+
+
+  def self.calculate_optimized_cost
+    routes = RouteCycle.optimized
+    center = Depot.where(index: 0).first
+    routes.each do |route|
+      cycle = []
+      cost = 0
+      cycle << center
+      route.nodes.each do |node|
+        cycle << Depot.where(index: node).first
+      end
+      cycle << center
+      cycle.flatten!
+
+      cycle.each_cons(2) do |depot, next_depot|
+        puts ">>>> #{[depot.index, next_depot.index]} > #{symmetric_costs[depot.index][next_depot.index].to_f}"
+        cost += symmetric_costs[depot.index][next_depot.index].to_f
+      end
+      route.update_column(:cost, cost)
+    end
   end
 
 
