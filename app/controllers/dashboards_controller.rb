@@ -20,5 +20,8 @@ class DashboardsController < ApplicationController
 
   def reset_data
     RouteCycle.clarke_wright
+    respond_to do |format|
+      format.html { redirect_to optimum_route_dashboards_path, notice: 'Path Executed successfully.' }
+    end
   end
 end
