@@ -1,4 +1,6 @@
 Vrp::Application.routes.draw do
+  resources :capacities
+
   resources :employees
 
   resources :tracks

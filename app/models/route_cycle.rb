@@ -12,7 +12,7 @@ class RouteCycle < ActiveRecord::Base
 
   def self.clarke_wright
     build_initial_cycle
-    route_extension(40, demands)
+    route_extension(capacity, demands)
     cost_calculation
   end
 

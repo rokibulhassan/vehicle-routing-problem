@@ -12,6 +12,10 @@ module ApplicationHelper
     depots_size - 1
   end
 
+  def capacity
+    Capacity.last.limit || 40
+  end
+
   def demands
     depots.collect(&:demand)
   end

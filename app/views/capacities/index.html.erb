@@ -1,0 +1,27 @@
+<h1>Listing capacities</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Limit</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @capacities.each do |capacity| %>
+      <tr>
+        <td><%= capacity.limit %></td>
+        <td><%= link_to 'Show', capacity %></td>
+        <td><%= link_to 'Edit', edit_capacity_path(capacity) %></td>
+        <td><%= link_to 'Destroy', capacity, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Capacity', new_capacity_path %>
