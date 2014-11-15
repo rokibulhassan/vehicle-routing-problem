@@ -23,6 +23,7 @@
         <td><%= depot.latitude %></td>
         <td><%= depot.longitude %></td>
         <td><%= link_to 'Show on Map', depot, method: :get, class: 'btn btn-xs btn-info' %></td>
+        <td><%= link_to 'Employees', employees_path(depot_id: depot.id), method: :get, class: 'btn btn-xs btn-info' %></td>
         <td><%= link_to 'Edit', edit_depot_path(depot), method: :get %></td>
         <td><%= link_to 'Destroy', depot, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
