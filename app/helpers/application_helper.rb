@@ -13,7 +13,7 @@ module ApplicationHelper
   end
 
   def capacity
-    Capacity.last.limit || 40
+    Capacity.last.try(:limit) || 40
   end
 
   def demands
