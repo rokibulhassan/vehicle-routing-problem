@@ -1,6 +1,9 @@
 Vrp::Application.routes.draw do
+  resources :employees
+
   resources :tracks
   resources :depots
+  resources :people
 
   resources :dashboards do
     collection do

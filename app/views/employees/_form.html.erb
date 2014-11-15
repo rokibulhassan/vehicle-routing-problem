@@ -1,0 +1,10 @@
+<%= simple_form_for(@employee) do |f| %>
+    <div class="form-inputs">
+      <%= f.input :name %>
+      <%= f.input :title %>
+      <%= f.input :depot_id, collection: Depot.all.collect { |c| [c.name, c.id] }, prompt: 'Please select Location' %>
+    </div>
+    <div class="form-actions">
+      <%= f.button :submit %>
+    </div>
+<% end %>

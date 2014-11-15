@@ -1,4 +1,4 @@
-<h1>Listing depots</h1>
+<h1>Listing Locations</h1>
 
 <table class="table">
   <thead>
@@ -17,8 +17,8 @@
   <% @depots.each do |depot| %>
       <tr>
         <td><%= depot.name %></td>
-        <td><%= depot.demand %></td>
         <td><%= depot.index %></td>
+        <td><%= depot.demand %></td>
         <td><%= depot.symmetric_costs %></td>
         <td><%= depot.latitude %></td>
         <td><%= depot.longitude %></td>

@@ -11,7 +11,6 @@ class RouteCycle < ActiveRecord::Base
 
 
   def self.clarke_wright
-    create_depots
     build_initial_cycle
     route_extension(40, demands)
     cost_calculation

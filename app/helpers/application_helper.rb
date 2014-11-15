@@ -24,6 +24,10 @@ module ApplicationHelper
     Depot.destroy_all
   end
 
+  def clean_employee!
+    Employee.destroy_all
+  end
+
   def symmetric_costs
     symmetric_costs = []
     depots.each do |depot|
@@ -46,4 +50,12 @@ module ApplicationHelper
     Depot.create(name: "Agargaon, Dhaka, Bangladesh", latitude: 23.7785, longitude: 90.3797, index: 9, demand: 6, symmetric_costs: "12, 22, 22, 17, 18, 15, 16, 11, 10, 0")
   end
 
+  def populate_employee
+    clean_employee!
+    depots.each do |depot|
+      depot.demand.times do |n|
+        Employee.create(name: "Rokibul Hasan #{depot.index}-#{n}", title: "Software Engineer", depot_id: depot.id)
+      end
+    end
+  end
 end

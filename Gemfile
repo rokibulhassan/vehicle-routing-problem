@@ -20,13 +20,9 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 
-
-gem 'polymer-rails'
-gem 'polymer-core-rails'
-gem 'polymer-paper-rails'
-gem 'polymer-google-apis', :path => './lib/polymer-google-apis'
-gem 'polymer-google-map', :path => './lib/polymer-google-map'
-
+gem 'simple_form', '~> 3.1.0.rc1',
+    github: 'plataformatec/simple_form',
+    branch: 'master'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails',
     :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git',
