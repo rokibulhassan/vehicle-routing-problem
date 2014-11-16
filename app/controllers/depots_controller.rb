@@ -53,6 +53,6 @@ class DepotsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def depot_params
-    params.require(:depot).permit(:latitude, :longitude, :name, :demand, :symmetric_costs)
+    params.require(:depot).permit(:latitude, :longitude, :name, :demand, :symmetric_costs, :index)
   end
 end
