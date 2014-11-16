@@ -2,7 +2,7 @@ class DepotsController < ApplicationController
   before_action :set_depot, only: [:show, :edit, :update, :destroy]
 
   def index
-    @depots = Depot.all
+    @depots = Depot.re_order
   end
 
   def show
